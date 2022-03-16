@@ -42,9 +42,9 @@ const Chart = ({containerStyle, chartPrices, lastPrice, changePct})=>{
         }
     }
 
-    const formatCurrency = (value) => {
+    const formatCurrency = ({formatted, value}) => {
         'worklet';
-        return `$${value>0 ? Number(value).toLocaleString() : Number(lastPrice)?.toLocaleString() }`;
+        return `$${value>0 ? formatted : Number(lastPrice)?.toLocaleString() }`;
     }
 
     const formatDateTime = ({ value, formatted }) => {
