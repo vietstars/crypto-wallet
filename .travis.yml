@@ -1,0 +1,36 @@
+env:
+  global:
+  - NODE_VERSION=16.14.0
+  - EXPO_USERNAME=vietstar.nt@gmail.com
+  - EXPO_PASSWORD=B24121982b
+
+install:
+- curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+- export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+- nvm install $NODE_VERSION
+- nvm use $NODE_VERSION
+- nvm alias default $NODE_VERSION
+
+- npm install -g npm@latest
+- npm install
+- npm install jest-expo
+- npm install -g expo-cli
+- npm install expo-updates
+
+cache:
+  directories:
+    - ~/.npm
+    - .jest
+
+script:
+  - npm ci
+  - npx jest --ci
+
+jobs:
+  include:
+    - stage: deploy
+      node_js: lts/*
+      script:
+        - npm ci
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - npx expo publish --non-interactive
